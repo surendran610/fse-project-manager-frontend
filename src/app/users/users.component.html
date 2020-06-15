@@ -1,0 +1,152 @@
+<br>
+<div class="card ">
+  <div class="card-header card bg-primary text-white">
+    USERS
+  </div>
+  <div class="offset-3 col-6 mt-3">
+    <div class="form-group row">
+      <label for="employeeid" class="col-3 font-weight-bold">Employee ID</label>
+      <div class="input-group mb-3 col-9">
+        <input type="text" class="form-control" id="employeeid" placeholder="Enter Employee ID">
+        <div class="input-group-append">
+          <button type="button" class="btn btn-primary " data-target="#addUser" data-toggle="modal">Add
+            Employee</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card ">
+  <div class="card-header card bg-primary text-white">
+    USERS
+  </div>
+  <br>
+
+  <!--table started-->
+  <table id ="emptableId" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Employee ID</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let emp of userModelList; let i = index">
+        <td>{{ emp.firstName}}</td>
+        <td>{{ emp.lastName }}</td>
+        <td>{{ emp.empId }}</td>
+        <td>
+          <button type="button" class="btn btn-primary " data-target="#onEdit" data-toggle="modal" (click)="onEdit(emp)">Edit</button> |
+          <button class="btn btn-danger"  type="button" (click)="deleteUsers(emp.id,i)">Delete</button>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+   <!--table ends-->
+
+    <!--add user starts-->
+  <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Employee</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="container">
+            <div class="row">
+                <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                  <div class="form-group">
+                    <label>Employee Id</label>
+                    <input type="text" formControlName="employeeid" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.employeeid.errors }" />
+                    <div *ngIf="submitted && f.employeeid.errors" class="invalid-feedback">
+                      <div *ngIf="f.employeeid.errors.required">Employee Id is required</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" formControlName="firstName" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
+                    <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                      <div *ngIf="f.firstName.errors.required">First Name is required</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" formControlName="lastName" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
+                    <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                      <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+                    </div>
+                  </div>
+              
+                  <div class="form-group">
+                    <button class="btn btn-primary">Add User</button>
+                  </div>
+                </form>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--add user ends-->
+
+    <!--edit users starts-->
+    <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update Employee</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container">
+              <div class="row">
+                  <form [formGroup]="registerForm" (ngSubmit)="onUpdateUser()">
+                    <div class="form-group">
+                      <label>Employee Id</label>
+                      <input type="text" formControlName="employeeid" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.employeeid.errors }" />
+                      <div *ngIf="submitted && f.employeeid.errors" class="invalid-feedback">
+                        <div *ngIf="f.employeeid.errors.required">Employee Id is required</div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>First Name</label>
+                      <input type="text" formControlName="firstName" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
+                      <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                        <div *ngIf="f.firstName.errors.required">First Name is required</div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>Last Name</label>
+                      <input type="text" formControlName="lastName" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
+                      <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                        <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-primary">Update User</button>
+                    </div>
+                  </form>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!--edit users ends-->
+</div>

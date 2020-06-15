@@ -1,0 +1,203 @@
+<div class="card ">
+  <div class="card-header card bg-primary text-white">
+    PROJECTS
+  </div>
+  <table>
+    <tr>
+      <th>
+        <div class="form-group col-3">
+          <label for="projectid">Project name</label>
+        </div>
+      </th>
+      <th>
+        <input type="text" class="form-control" id="projectid" placeholder="Enter enter project">
+      </th>
+      <th>
+        <button type="button" class="btn btn-primary " data-target="#addProject" data-toggle="modal">Add
+          Project</button>
+      </th>
+    </tr>
+  </table>
+  <div class="card ">
+    <div class="card-header card bg-primary text-white">
+      PROJECTS
+    </div>
+    <br>
+    <!--add project starts-->
+    <div class="modal fade" id="addProject" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Project</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <form [formGroup]="addProjectForm" (ngSubmit)="onSubmit()">
+              <div class="form-group row">
+                <label class="col-2">Project Name</label>
+                <input type="text" formControlName="projectName" class="form-control col-5"
+                  [ngClass]="{ 'is-invalid': submitted && f.projectName.errors }" />
+                <div *ngIf="submitted && f.projectName.errors" class="invalid-feedback col-2">
+                  <div *ngIf="f.projectName.errors.required">Project Name is required</div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-2">Priority</label>
+                <ng5-slider class="col-5" [(value)]="value" formControlName="priority" [options]="options"></ng5-slider>
+              </div>
+              <div class="form-group row">
+                <label class="col-2">Start Date</label>
+                <input type="date" formControlName="startDate" class="form-control col-5" />
+              </div>
+              <div class="form-group row">
+                <label class="col-2">End Date</label>
+                <input type="date" formControlName="endDate" class="form-control col-5" />
+              </div>
+              <div class="form-group row">
+                <label class="col-2">Manager</label>
+                <input type="text" formControlName="manager" class="form-control col-5" />
+                <button type="button" class="btn btn-primary col-2" data-target="#searchUser"
+                  data-toggle="modal">Search</button>
+              </div>
+
+              <div class="form-group">
+                <button class="btn btn-primary">Add Project</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--add project ends-->
+
+  <!--table started-->
+  <table id="projectId" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table">
+    <thead>
+      <tr>
+        <th>Project Name</th>
+        <th>Priority</th>
+        <th>Number of Task</th>
+        <th>Completed</th>
+        <th>Start Date</th>
+        <th>Ends Date</th>
+        <th style="width: 15%;">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let project of projectList; let i = index">
+        <td>{{ project.projectName}}</td>
+        <td>{{ project.priority }}</td>
+        <td>{{ project.taskCount }}</td>
+        <td>{{ project.taskCompletedCount }}</td>
+        <td>{{ project.startDate }}</td>
+        <td>{{ project.endDate }}</td>
+        <td style="width: 15%;">
+          <button type="button" class="btn btn-warning " data-target="#onEdit" data-toggle="modal"
+            (click)="onEditProject(project)">Update</button> |
+          <button class="btn btn-danger" type="button" (click)="suspendProject(project.id,i)">Suspend</button>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+  <!--table ends-->
+
+  <!--update project starts-->
+  <div class="modal fade" id="editProject" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="addProjectForm" (ngSubmit)="onUpdateProject()">
+          <div class="form-group row">
+            <label class="col-2">Project Name</label>
+            <input type="text" formControlName="projectName" class="form-control col-5"
+              [ngClass]="{ 'is-invalid': submitted && f.projectName.errors }" />
+            <div *ngIf="submitted && f.projectName.errors" class="invalid-feedback col-2">
+              <div *ngIf="f.projectName.errors.required">Project Name is required</div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-2">Priority</label>
+            <ng5-slider class="col-5" [(value)]="value" formControlName="priority" [options]="options"></ng5-slider>
+          </div>
+          <div class="form-group row">
+            <label class="col-2">Start Date</label>
+            <input type="date" formControlName="startDate"  class="form-control col-5" id="txtSDate" value="{{ project.startDate }}"/>
+          </div>
+          <div class="form-group row">
+            <label class="col-2">End Date</label>
+            <input type="date" formControlName="endDate" class="form-control col-5" id="txtEDate"  value="{{ project.endDate }}"/>
+          </div>
+          <div class="form-group row">
+            <label class="col-2">Manager</label>
+            <input type="text" formControlName="manager" class="form-control col-5" />
+            <button type="button" class="btn btn-primary col-2" data-target="#searchUser"
+              data-toggle="modal">Search</button>
+          </div>
+
+          <div class="form-group">
+            <button class="btn btn-primary">Update Project</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!--Search started-->
+<div class="modal fade" id="searchUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLongTitle">User List</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search Here" [(ngModel)]="searchUser">
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Employee Id</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of userModelList | filter:searchUser">
+            <td>{{emp.firstName}}</td>
+            <td>{{emp.lastName}}</td>
+            <td>{{emp.empId}}</td>
+            <td>
+              <button type="button" class="btn btn-primary " data-target="#onSearch" data-toggle="modal"
+                (click)="onSearch(emp)">Select</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+<!--Search ends-->
+  <!--update project ends-->
+</div>

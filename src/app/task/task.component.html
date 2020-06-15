@@ -1,0 +1,179 @@
+<div class="card ">
+  <div class="card-header card bg-primary text-white">
+    ADD TASK
+  </div>
+  <br>
+  <div>
+    <form [formGroup]="addTaskForm" (ngSubmit)="onSubmit()">
+      <div class="form-group row">
+        <label class="col-2">Project</label>
+        <input type="text" formControlName="projectName" class="form-control col-3" />
+        <button type="button" class="btn btn-primary col-1" data-target="#searchProject"
+          data-toggle="modal"  >Search</button>
+      </div>
+      <div class="form-group row ">
+        <label class="col-2 ">Task</label>
+        <input type="text" formControlName="task" class="form-control col-3" />
+        <label class="form-check-label ">
+          <input type="checkbox" class="form-check-input col-2" [ngModelOptions]="{standalone: true}" [(ngModel)]="isChecked" (change)="isParentTask(isChecked?'true':'false')">Parent Task
+        </label>
+      </div>
+      <div class="form-group row">
+        <label class="col-2">Priority</label>
+        <ng5-slider class="col-3" [(value)]="value" formControlName="priority" [options]="options"></ng5-slider>
+      </div>
+      <div class="form-group row">
+        <label class="col-2">Parent Task</label>
+        <input type="text" formControlName="parentTaskName" class="form-control col-3" />
+        <button type="button" class="btn btn-primary col-1" data-target="#searchParentTask"
+          data-toggle="modal" [disabled]="!isSearchBtnEnable">Search</button>
+      </div>
+      <div class="form-group row">
+        <label class="col-2">Start Date</label>
+        <input type="date" formControlName="startDate" class="form-control col-3" />
+      </div>
+      <div class="form-group row">
+        <label class="col-2">End Date</label>
+        <input type="date" formControlName="endDate" class="form-control col-3" />
+      </div>
+      <div class="form-group row">
+        <label class="col-2">User</label>
+        <input type="text" formControlName="userName" class="form-control col-3" />
+        <button type="button" class="btn btn-primary col-1" data-target="#searchUser"
+          data-toggle="modal" >Search</button>
+      </div>
+      <div class="form-group row">
+        <label class="col-2">Status</label>
+        <input type="text" formControlName="status" class="form-control col-3" />
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary">Add Task</button>
+        <button class="btn btn-primary">Reset</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- User Search started-->
+  <div class="modal fade" id="searchUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">User List</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search Here" [(ngModel)]="searchUser">
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Employee Id</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let emp of userModelList | filter:searchUser">
+                <td>{{emp.firstName}}</td>
+                <td>{{emp.lastName}}</td>
+                <td>{{emp.empId}}</td>
+                <td>
+                  <button type="button" class="btn btn-primary " data-target="#onSearch" data-toggle="modal"
+                    (click)="onSearchUser(emp)">Select</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- User Search ends-->
+
+
+  <!-- Project Search started-->
+  <div class="modal fade" id="searchProject" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Project List</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search Here" [(ngModel)]="searchProject">
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Project Name</th>
+                <th scope="col">Priority</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let project of projectList | filter:searchProject">
+                <td>{{project.projectName}}</td>
+                <td>{{project.priority}}</td>
+                <td>{{project.startDate}}</td>
+                <td>{{project.endDate}}</td>
+                <td>
+                  <button type="button" class="btn btn-primary " data-target="#onSearch" data-toggle="modal"
+                    (click)="onSearchProject(project)">Select</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Project Search ends-->
+
+  <!-- Parent Task Search starts-->
+  <div class="modal fade" id="searchParentTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Parent Task List</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search Here" [(ngModel)]="searchParentTask">
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Parent Task Name</th>              
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let parentTask of parentTaskList | filter:searchParentTask">
+              <td>{{parentTask.parentTaskName}}</td>
+              <td>
+                <button type="button" class="btn btn-primary " data-target="#onSearch" data-toggle="modal"
+                  (click)="onSearchParentTask(parentTask)">Select</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Parent Task Search ends-->
+
+</div>
