@@ -15,6 +15,9 @@ RUN npm run build --prod
 
 FROM nginx:latest 
 
-COPY --from=builder /app/dist/ /usr/share/nginx/html/
-
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
+#RUN rm -rf /usr/share/nginx/html/*
+
+#COPY --from=node /app/dist/ /usr/share/nginx/html/
+COPY --from=node /app/dist/ /var/www/html/
